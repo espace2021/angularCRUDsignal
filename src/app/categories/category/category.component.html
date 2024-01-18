@@ -1,0 +1,64 @@
+<div class="container">
+
+  <form >
+  
+      <div class="form-group">
+          <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Nom Catégorie" 
+          id="nomscategorie" name="nomscategorie" 
+          [(ngModel)]="edit() ?categoryEdited().nomcategorie :newcategory().nomcategorie"
+            >
+          </div>
+        </div>
+  
+      <div class="form-group">
+          <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Image Catégorie" 
+          id="imagecategorie" name="imagecategorie"  
+        [(ngModel)]="edit() ?categoryEdited().imagecategorie :newcategory().imagecategorie"
+          >
+          </div>
+        </div>
+       
+      <div class="form-group">
+        <div class="col-sm-4">
+          <div>
+            @if (edit()) { 
+                <button type="submit" class="btn btn-success" (click)="updateCategory()">Modifier</button>
+                <button type="reset" class="btn btn-warning" (click)="annuler()">Annuler</button>
+                  } 
+            @else { 
+            <button type="submit" class="btn btn-success" (click)="createCategory()">Ajouter</button>  
+          } 
+          </div>  
+        </div>
+      </div>
+  
+    </form>
+
+    <div>
+      <table class="table table-Light table-hover">
+        <thead>
+  <tr>
+    <th>Image</th>
+    <th>Nom</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+<tbody>
+      @for (item of categories$(); track item.nomcategorie) {
+  <tr> 
+    <td><img [src]="item.imagecategorie" alt="..." width="70" height="50"/> </td> 
+    <td>{{ item.nomcategorie }}</td> 
+    <td>
+      <button class="btn btn-primary" (click)="editCategory(item)">Editer</button>
+      <button class="btn btn-danger" (click)="deleteCategory(item)">Supprimer</button>
+    </td> 
+    </tr>
+} @empty {
+  <tr> <td colspan="3">There are no items. </td></tr>
+}
+</tbody>
+</table>
+</div>
+  </div>
