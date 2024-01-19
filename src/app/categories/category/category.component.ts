@@ -1,6 +1,5 @@
 import { Component, OnInit, signal  } from '@angular/core';
 import { CategoryService } from '../category.service';
-import { Observable } from 'rxjs';
 import { Category } from '../category';
 import { FormsModule } from '@angular/forms';
 
@@ -18,15 +17,12 @@ categories$: any;
 
 //pour add
 newcategory=signal({ 
+  id : 0,
   nomcategorie: "", 
   imagecategorie: ""})
 
 //pour edit
 edit = signal(false);
-categoryEdited=signal({ 
-  id:0,
-  nomcategorie: "", 
-  imagecategorie: ""})
   
   constructor(private categoryService: CategoryService) {}
 
@@ -35,11 +31,11 @@ categoryEdited=signal({
   }
 
   createCategory() {
-    this.categoryService.createCategory(this.newcategory()).subscribe(((data: any)=>{console.log(data)}))
-   
+    this.categoryService.createCategory(this.newcategory());
     this.newcategory.set({
-      nomcategorie: "", imagecategorie: ""
+    id:0,  nomcategorie: "", imagecategorie: ""
     });
+ 
   }
 
   deleteCategory(category:Category):void {
@@ -47,20 +43,23 @@ categoryEdited=signal({
   }
 
   editCategory(category:Category):void {
-    this.categoryEdited.set({
+    this.newcategory.set({
      id:Number(category.id), nomcategorie: category.nomcategorie, imagecategorie: category.imagecategorie
     });
     this.edit.set(true);
-    console.log(this.categoryEdited())
+    console.log(this.newcategory())
   }
 
   updateCategory():void {
-    console.log(this.categoryEdited())
-    this.categoryService.updateCategory(this.categoryEdited())
+    console.log(this.newcategory())
+    this.categoryService.updateCategory(this.newcategory())
   }
 
   annuler():void {
     this.edit.set(false);
+    this.newcategory.set({
+      id:0,  nomcategorie: "", imagecategorie: ""
+      });
   }
 
   

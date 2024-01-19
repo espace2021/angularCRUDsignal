@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Category } from './category';
 import { HttpClient } from '@angular/common/http';
-import { categories } from './categories.signal';
+import { categories , idValue} from './categories.signal';
 
 
 @Injectable({
@@ -15,21 +14,24 @@ export class CategoryService {
 
    
   constructor() {
-    this.http.get<Category[]>(this.api).subscribe(data => { console.log(data)
-    categories.set(data)
+    this.http.get<Category[]>(this.api).subscribe(data => { 
+    console.log(data);
+    categories.set(data);
+ 
     });
   
    }
 
  
   createCategory(category: Category) {
-    categories.update(categories => {
-      categories.push(category)
-         return categories
-      });
-      return this.http.post(this.api+'/' , category)
-  
-  }
+    return this.http.post(this.api+'/' , category).subscribe(((data: any)=>{
+        idValue.set(data.id)
+        categories.update(categories => {
+          categories.push({id:idValue(),nomcategorie:category.nomcategorie,imagecategorie:category.imagecategorie})
+              return categories
+          })
+      }))
+    }
 
   readCategories() {
     return categories;
